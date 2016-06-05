@@ -3,28 +3,29 @@
 #include<functional>
 #include<algorithm>
 using namespace std;
-
+void disp(char *comments, vector<int> &ivec)
+{
+	cout << comments; 
+	vector<int>::iterator iter = ivec.begin();
+	for(; iter!= ivec.end(); ++iter)
+		cout << *iter << ' ';
+	cout << endl; 
+}
 
 int main()
 {
 	int ia[]={1, 34, 2, 45, 3, 1 ,53};
-	//cout << sizeof(ia)/4 << endl;//elements in array
-	vector<int> iv(ia, ia+7);
+	vector<int> iv1(ia, ia+7);
+	vector<int> iv2(7, 2); 
 	//print vector
-	for(vector<int>::const_iterator iter = iv.begin(); iter!=iv.end(); ++iter)
-		cout << *iter << " ";
-	cout << endl;
-	//sort with ascending
-	sort(iv.begin(), iv.end(), greater<int>());//使用函数对象 greater 进行升序排序 
-	//print vector
-	for(vector<int>::const_iterator iter = iv.begin(); iter!=iv.end(); ++iter)
-		cout << *iter << " ";
-	cout << endl;
-	//sort with descending
-	sort(iv.begin(), iv.end(), less<int>());//less 降序排序 
-	//print vector
-	for(vector<int>::const_iterator iter = iv.begin(); iter!=iv.end(); ++iter)
-		cout << *iter << " ";
-	cout << endl;
+	disp("iv1: ", iv1);
+	disp("iv2: ", iv2);
+	vector<int> iv_pus(7);
+	//pulse two vector
+	transform(iv1.begin(), iv1.end(), iv2.begin(), iv_pus.begin(), plus<int>());
+	disp("pus: ", iv_pus);
+	//multiplies
+	transform(iv1.begin(), iv1.end(), iv2.begin(), iv_pus.begin(), multiplies<int>());
+	disp("mul: ", iv_pus);
 	return 0;
 }
