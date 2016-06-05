@@ -12,20 +12,41 @@ void disp(char *comments, vector<int> &ivec)
 	cout << endl; 
 }
 
+vector<int> filter1(const vector<int> &vec, int val, less<int> &lt)
+{
+	vector<int> nvec;
+	vector<int>::const_iterator iter = vec.begin();
+	while( (iter = find_if(iter, vec.end(),
+		bind2nd(lt, val))) != vec.end() )
+	{
+		nvec.push_back( *iter );
+		++iter;
+	}
+	return nvec;
+}
+
+//generic
+template<typename InputIterator, typename OutputIterator, 
+		 typename ElemType, typename Comp>
+OutputIterator
+filter( InputIterator first, InputIterator last, 
+		OutputIterator at, const ElemType &val, Comp pred)
+{
+	while(( first = find_if(first, last, 
+			bind2nd(pred, val))) != last )
+	{
+		cout << "found value: " << first << endl;
+		*at++ = *first;
+	}
+	return at;
+}
+
+
 int main()
 {
 	int ia[]={1, 34, 2, 45, 3, 1 ,53};
 	vector<int> iv1(ia, ia+7);
 	vector<int> iv2(7, 2); 
-	//print vector
-	disp("iv1: ", iv1);
-	disp("iv2: ", iv2);
-	vector<int> iv_pus(7);
-	//pulse two vector
-	transform(iv1.begin(), iv1.end(), iv2.begin(), iv_pus.begin(), plus<int>());
-	disp("pus: ", iv_pus);
-	//multiplies
-	transform(iv1.begin(), iv1.end(), iv2.begin(), iv_pus.begin(), multiplies<int>());
-	disp("mul: ", iv_pus);
+	
 	return 0;
 }
