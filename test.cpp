@@ -1,41 +1,28 @@
 #include<iostream>
 #include<vector>
 #include<list>
-#include<functional>
+#include<string>
+#include<map>
+#include<set> 
 using namespace std;
-template <typename InputIterator>
-void disp(char *comments, InputIterator first, InputIterator last)
-{
-	cout << comments; 
-	for(; first!= last; ++first)
-		cout << *first << ' ';
-	cout << endl; 
-}
-
-//generic
-template<typename InputIterator, typename OutputIterator, 
-		 typename ElemType, typename Comp>
-OutputIterator
-filter( InputIterator first, InputIterator last, 
-		OutputIterator &at, const ElemType &val, Comp pred)
-{
-	while(( first = find_if(first, last, 
-			bind2nd(pred, val))) != last )
-	{
-		cout << "found value: " << *first << endl;
-		at.push_back(*first++);
-	}
-	return at;
-}
 
 int main()
 {
-	int ia[]={1, 34, 2, 45, 3, 1 ,53};
-	vector<int> iv1(ia, ia+7);
-	list<int> ivRes;
-	int num = 6;
-	filter( iv1.begin(), iv1.end(), 
-			ivRes, num, greater<int>() );//greater<type> -> ´óÓÚnum 
-	disp("ilr: ", ivRes.begin(), ivRes.end());
+	map<string, int> words;
+	words["first"] = 10;
+	string tword = "adf";
+//	cin >> tword;
+	words[tword]++;
+	map<string, int>::iterator it=words.begin();
+	cout << "key" << ' ' << "value" << '\n' << "--------" << endl; 
+	for(; it != words.end(); ++it)
+	{
+		cout << it->first << ' ' 
+			 << it->second << endl; 
+	}
+	
+	map<int, int> imap;
+	imap[213] = 0;
+	cout << imap[213] << endl;	 
 	return 0;
 }
