@@ -1,28 +1,48 @@
 #include<iostream>
 #include<vector>
-#include<list>
-#include<string>
-#include<map>
-#include<set> 
+#include<functional>
+#include<iterator>
+#include<algorithm>
 using namespace std;
+void disp(char *comments, vector<int> &ivec)
+{
+	cout << comments; 
+	vector<int>::iterator iter = ivec.begin();
+	for(; iter!= ivec.end(); ++iter)
+		cout << *iter << ' ';
+	cout << endl; 
+}
+
+//generic
+template<typename InputIterator, typename OutputIterator, 
+		 typename ElemType, typename Comp>
+OutputIterator
+filter( InputIterator first, InputIterator last, 
+		OutputIterator at, const ElemType &val, Comp pred)
+{
+	while(( first = find_if(first, last, 
+			bind2nd(pred, val))) != last )
+	{
+		cout << "found value: " << *first << endl;
+		*at++ = *first++;
+	}
+	return at;
+}
+
 
 int main()
 {
-	map<string, int> words;
-	words["first"] = 10;
-	string tword = "adf";
-//	cin >> tword;
-	words[tword]++;
-	map<string, int>::iterator it=words.begin();
-	cout << "key" << ' ' << "value" << '\n' << "--------" << endl; 
-	for(; it != words.end(); ++it)
-	{
-		cout << it->first << ' ' 
-			 << it->second << endl; 
-	}
+	const int elemSize = 7;
+	int ia[elemSize]={1, 34, 2, 45, 3, 1 ,53};
+	vector<int> iv1(ia, ia+7);
 	
-	map<int, int> imap;
-	imap[213] = 0;
-	cout << imap[213] << endl;	 
+	//vector<int> iv2(7); //指定大小 
+	//filter(iv1.begin(), iv1.end(), iv2.begin(), elemSize, greater<int>() );
+	
+	vector<int> iv2;//不指定大小，使用back_inserter进行传参 
+	//filter(iv1.begin(), iv1.end(), iv2.begin(), elemSize, greater<int>() );
+	filter(iv1.begin(), iv1.end(), back_inserter(iv2), elemSize, greater<int>() );
+	//filter(iv1.begin(), iv1.end(), inserter(iv2, iv2.end()), elemSize, greater<int>() );
+	disp("iv2: ", iv2);
 	return 0;
 }
