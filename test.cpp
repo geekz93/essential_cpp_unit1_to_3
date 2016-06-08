@@ -4,14 +4,34 @@
 #include<algorithm>
 #include<string>
 #include<fstream>
-#include<set>
-#include<map>
 using namespace std;
-//exercise3.1
-//read a text file, store each word as a key in a map
-//the key value is the count of each word
-//define a set containing words such as "a, an, or, 
-//the, and, but"
+//exercise3.2
+//read a text file, store it in a vector
+//sort the vector by the length of string
+
+template <typename InputIterator>
+void disp( InputIterator first, InputIterator last, char *comments="", int newline=10 )
+{
+	cout << comments; 
+	int line = 0;
+	for(; first!=last; ++first)
+	{
+	    cout << *first << ' ';
+	    line++;
+		if( newline==line )
+		{
+			line = 0;
+			cout << endl;
+		} 
+	}
+	cout << "\n\n";
+}
+
+//…˝–Ú≈≈¡– 
+bool SizeDown(string str1, string str2){ return(str1.size() > str2.size()); }
+//Ωµ–Ú≈≈¡– 
+bool SizeUp(string str1, string str2){ return(str1.size() < str2.size()); }
+
 
 int main()
 {
@@ -24,29 +44,12 @@ int main()
 	
 	istream_iterator<string> istr(ifile);
 	istream_iterator<string> eof;
-	
-	//vector<string> ReadStr;
-	string sExWord[]={"a", "an", "or", "the", "and", "but"};
-	set<string> ssExWord(sExWord, sExWord+6);
-	set<string>::iterator sit = ssExWord.begin();
-/*//display set
-	for(; sit!=ssExWord.end(); ++sit)
-		cout << *sit << endl;
-*/
-	map<string, int> WordAcount;
-	
-	for( ; istr!=eof; ++istr)
-	{
-		if( ssExWord.count(*istr) )
-			continue;
-		WordAcount[*istr]++;
-	}
-	map<string, int>::iterator miter=WordAcount.begin();
-for( ; miter!=WordAcount.end(); ++miter)
-	{
-		cout<< miter->first << " "
-			<< miter->second << endl;
-	}
-	
+
+	vector<string> ReadStr(istr, eof);
+//	vector<string> ReadStr(istr.begin(), istr.end());//error
+	disp(ReadStr.begin(), ReadStr.end(), "Original:\n");
+	sort(ReadStr.begin(), ReadStr.end(), SizeUp);
+	disp(ReadStr.begin(), ReadStr.end(), "Sort:\n", 7);
+	cout << endl;
 	return 0;
 }
