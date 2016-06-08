@@ -4,10 +4,10 @@
 #include<algorithm>
 #include<string>
 #include<fstream>
+#include<map>
 using namespace std;
-//exercise3.2
-//read a text file, store it in a vector
-//sort the vector by the length of string
+//exercise3.3
+//定义一个 map :索引为家庭的姓，键值为家庭的所有childern姓名 
 
 template <typename InputIterator>
 void disp( InputIterator first, InputIterator last, char *comments="", int newline=10 )
@@ -27,29 +27,56 @@ void disp( InputIterator first, InputIterator last, char *comments="", int newli
 	cout << "\n\n";
 }
 
-//升序排列 
-bool SizeDown(string str1, string str2){ return(str1.size() > str2.size()); }
-//降序排列 
-bool SizeUp(string str1, string str2){ return(str1.size() < str2.size()); }
-
 
 int main()
 {
-	ifstream ifile("article.txt");
-	if(!ifile)
+	map< string, vector<string> > familybook;
+	vector<string> familys;
+	string surname;
+	string sChildName;
+	int num=2;
+	while(num--)
 	{
-		cerr<< "open file err..." << endl;
-		return -1;
+		
+		cout << "输入姓氏: ";
+		cin >> surname;
+		//cout << endl;
+		cout << "输入孩子姓名: "; 
+		while(cin >> sChildName)
+		{
+			familys.push_back(sChildName);
+			if('\n' == cin.peek())
+			    break;
+		}
+		familybook[surname] = familys;
+		familys.clear();
+	}
+//	disp(familys.begin(), familys.end());
+	map< string, vector<string> >::iterator mit=familybook.begin();
+	vector<string>::iterator vit;
+	for(; mit != familybook.end(); ++mit)
+	{
+		vit = (mit->second).begin();
+		cout << mit->first << ": ";	
+		for(; vit != (mit->second).end(); ++vit)
+			cout << *vit << " ";
+		cout << endl;
 	}
 	
-	istream_iterator<string> istr(ifile);
-	istream_iterator<string> eof;
-
-	vector<string> ReadStr(istr, eof);
-//	vector<string> ReadStr(istr.begin(), istr.end());//error
-	disp(ReadStr.begin(), ReadStr.end(), "Original:\n");
-	sort(ReadStr.begin(), ReadStr.end(), SizeUp);
-	disp(ReadStr.begin(), ReadStr.end(), "Sort:\n", 7);
-	cout << endl;
+	while(true)
+	{
+	    cout << "输入姓氏查询：";
+        cin >> surname;
+        mit = familybook.find(surname);
+        if(mit == familybook.end())
+       	{
+			cout<< "未找到"<<endl;
+			continue;   
+ 		}
+        vit = mit->second.begin();
+        for(; vit != (mit->second).end(); ++vit)
+			cout << *vit << " ";
+		cout << endl;
+	}
 	return 0;
 }
