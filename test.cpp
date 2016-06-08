@@ -1,48 +1,27 @@
 #include<iostream>
 #include<vector>
-#include<functional>
 #include<iterator>
 #include<algorithm>
+#include<string>
 using namespace std;
-void disp(char *comments, vector<int> &ivec)
-{
-	cout << comments; 
-	vector<int>::iterator iter = ivec.begin();
-	for(; iter!= ivec.end(); ++iter)
-		cout << *iter << ' ';
-	cout << endl; 
-}
-
-//generic
-template<typename InputIterator, typename OutputIterator, 
-		 typename ElemType, typename Comp>
-OutputIterator
-filter( InputIterator first, InputIterator last, 
-		OutputIterator at, const ElemType &val, Comp pred)
-{
-	while(( first = find_if(first, last, 
-			bind2nd(pred, val))) != last )
-	{
-		cout << "found value: " << *first << endl;
-		*at++ = *first++;
-	}
-	return at;
-}
-
-
+//iostream iterators
 int main()
 {
-	const int elemSize = 7;
-	int ia[elemSize]={1, 34, 2, 45, 3, 1 ,53};
-	vector<int> iv1(ia, ia+7);
+	istream_iterator<string> inputs(cin);//定义输入向量：与标准数入流绑定 
+	istream_iterator<string> endfile;//输入的结束 end_of_file 
 	
-	//vector<int> iv2(7); //指定大小 
-	//filter(iv1.begin(), iv1.end(), iv2.begin(), elemSize, greater<int>() );
+	vector<string> text;
+	copy(inputs, endfile, back_inserter(text));//将输入的数据存入text向量由于不知道输入数据的大小故使用back_inserter 
 	
-	vector<int> iv2;//不指定大小，使用back_inserter进行传参 
-	//filter(iv1.begin(), iv1.end(), iv2.begin(), elemSize, greater<int>() );
-	filter(iv1.begin(), iv1.end(), back_inserter(iv2), elemSize, greater<int>() );
-	//filter(iv1.begin(), iv1.end(), inserter(iv2, iv2.end()), elemSize, greater<int>() );
-	disp("iv2: ", iv2);
+	sort(text.begin(), text.end());//排序 
+	
+	ostream_iterator<string> outputs(cout, " ");//定义输出向量：与标准输出流绑定 
+	copy(text.begin(), text.end(), outputs);//输出 
+	//同样可以输出数据 
+	/* 
+	vector<string>::iterator it = text.begin();
+	while( it!=text.end())
+	*outputs = *it++;//*outputs++没有区别？ 
+	*/
 	return 0;
 }
