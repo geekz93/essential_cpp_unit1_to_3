@@ -1,13 +1,13 @@
 #include<iostream>
-#include<vector>
+
 #include<iterator>
-#include<algorithm>
+
 #include<string>
 #include<fstream>
-#include<map>
+
 using namespace std;
-//exercise3.3
-//定义一个 map :索引为家庭的姓，键值为家庭的所有childern姓名 
+//exercise3.4
+//使用 io_iterator 输入一个数字序列，将序列中的奇数和偶数分别写到两个文件中 
 
 template <typename InputIterator>
 void disp( InputIterator first, InputIterator last, char *comments="", int newline=10 )
@@ -30,53 +30,24 @@ void disp( InputIterator first, InputIterator last, char *comments="", int newli
 
 int main()
 {
-	map< string, vector<string> > familybook;
-	vector<string> familys;
-	string surname;
-	string sChildName;
-	int num=2;
-	while(num--)
+	istream_iterator<int> input(cin);
+	istream_iterator<int> eos;
+	
+	ofstream ofile1("odd.txt");
+	ofstream ofile2("even.txt");
+	ostream_iterator<int> output1(ofile1," ");
+	ostream_iterator<int> output2(ofile2, " ");
+	
+	
+	if(!ofile2||!ofile2)
+	{cerr<< "open err..";return 0; }
+	for(; input!=eos; ++input)
 	{
-		
-		cout << "输入姓氏: ";
-		cin >> surname;
-		//cout << endl;
-		cout << "输入孩子姓名: "; 
-		while(cin >> sChildName)
-		{
-			familys.push_back(sChildName);
-			if('\n' == cin.peek())
-			    break;
-		}
-		familybook[surname] = familys;
-		familys.clear();
-	}
-//	disp(familys.begin(), familys.end());
-	map< string, vector<string> >::iterator mit=familybook.begin();
-	vector<string>::iterator vit;
-	for(; mit != familybook.end(); ++mit)
-	{
-		vit = (mit->second).begin();
-		cout << mit->first << ": ";	
-		for(; vit != (mit->second).end(); ++vit)
-			cout << *vit << " ";
-		cout << endl;
+		if( (*input)%2 )//odd
+			*output1++ = *input;
+		else
+			*output2++ = *input;
 	}
 	
-	while(true)
-	{
-	    cout << "输入姓氏查询：";
-        cin >> surname;
-        mit = familybook.find(surname);
-        if(mit == familybook.end())
-       	{
-			cout<< "未找到"<<endl;
-			continue;   
- 		}
-        vit = mit->second.begin();
-        for(; vit != (mit->second).end(); ++vit)
-			cout << *vit << " ";
-		cout << endl;
-	}
 	return 0;
 }
